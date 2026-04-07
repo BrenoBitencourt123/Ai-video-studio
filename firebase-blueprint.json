@@ -1,0 +1,126 @@
+{
+  "entities": {
+    "BrandContext": {
+      "title": "Brand Context",
+      "description": "Core identity and goals of the brand (e.g., Atlas).",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "targetAudience": { "type": "string" },
+        "toneOfVoice": { "type": "string" },
+        "mainBenefits": { "type": "array", "items": { "type": "string" } },
+        "pricing": { "type": "string" },
+        "uid": { "type": "string" }
+      },
+      "required": ["name", "description", "uid"]
+    },
+    "Campaign": {
+      "title": "Campaign",
+      "description": "A coordinated set of posts for a specific goal.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "goal": { "type": "string", "enum": ["growth", "retention", "sales"] },
+        "status": { "type": "string", "enum": ["active", "completed", "archived"] },
+        "startDate": { "type": "string", "format": "date-time" },
+        "endDate": { "type": "string", "format": "date-time" },
+        "uid": { "type": "string" }
+      },
+      "required": ["id", "title", "goal", "uid"]
+    },
+    "Mission": {
+      "title": "Mission",
+      "description": "A daily task for content creation.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "campaignId": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "type": { "type": "string", "enum": ["reel", "story", "feed", "engagement"] },
+        "status": { "type": "string", "enum": ["pending", "completed"] },
+        "date": { "type": "string", "format": "date" },
+        "projectId": { "type": "string" },
+        "uid": { "type": "string" }
+      },
+      "required": ["id", "title", "type", "status", "date", "uid"]
+    },
+    "ChannelProfile": {
+      "title": "Channel Profile",
+      "description": "Configuration for a specific YouTube/Shorts channel style.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "niche": { "type": "string" },
+        "baseStyle": { "type": "string", "enum": ["sketch", "pixel-art", "cinematic", "minimalist", "custom"] },
+        "customPromptSuffix": { "type": "string" },
+        "targetAudience": { "type": "string" },
+        "uid": { "type": "string", "description": "The owner's user ID." }
+      },
+      "required": ["id", "name", "niche", "baseStyle", "uid"]
+    },
+    "VideoProject": {
+      "title": "Video Project",
+      "description": "A project containing script, storyboard, and generated assets.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "profileId": { "type": "string" },
+        "title": { "type": "string" },
+        "script": { "type": "string" },
+        "format": { "type": "string" },
+        "hook": { "type": "string" },
+        "subject": { "type": "string" },
+        "caption": { "type": "string" },
+        "cta": { "type": "string" },
+        "hashtags": { "type": "string" },
+        "masterAudioUrl": { "type": "string" },
+        "storyboard": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "narration": { "type": "string" },
+              "imagePrompt": { "type": "string" },
+              "imageUrl": { "type": "string" },
+              "audioUrl": { "type": "string" },
+              "duration": { "type": "number" },
+              "isGenerating": { "type": "boolean" },
+              "isGeneratingAudio": { "type": "boolean" }
+            }
+          }
+        },
+        "isProcessingScript": { "type": "boolean" },
+        "uid": { "type": "string", "description": "The owner's user ID." },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "profileId", "title", "script", "storyboard", "uid"]
+    }
+  },
+  "firestore": {
+    "users/{userId}/brandContext/main": {
+      "schema": "BrandContext",
+      "description": "The main brand identity."
+    },
+    "users/{userId}/campaigns/{campaignId}": {
+      "schema": "Campaign",
+      "description": "Marketing campaigns."
+    },
+    "users/{userId}/missions/{missionId}": {
+      "schema": "Mission",
+      "description": "Daily missions."
+    },
+    "users/{userId}/profiles/{profileId}": {
+      "schema": "ChannelProfile",
+      "description": "User's channel profiles."
+    },
+    "users/{userId}/projects/{projectId}": {
+      "schema": "VideoProject",
+      "description": "User's video projects."
+    }
+  }
+}
